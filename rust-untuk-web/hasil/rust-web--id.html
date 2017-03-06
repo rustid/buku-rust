@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="crowbook">
+    <meta name="viewport" content="width=device-width">
+    <meta name="author" content="Bambang Purnomosidi D. P.">
+    
+    <title>Membangun Aplikasi Web Menggunakan Rust</title>
+    <style type = "text/css">
+      body {
+    font-family: "Linux Libertine", "Georgia", serif;
+    text-align: justify;
+    font-size: 100%;
+}
+
+p {
+    text-indent: 1.25em;
+    margin:0;
+    hyphens: auto;
+}
+
+blockquote {
+    margin: 1em;
+    font-style: italic;
+}
+code {
+    font-size: 80%;
+    font-family: "Linux Libertine Mono", monospace;
+    background-color: #F0F0F0;
+}
+pre {
+    font-family: "Linux Libertine Mono", monospace;
+    margin: 1em;
+    padding-top: 0;
+    background-color: #F0F0F0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+/* Try to disable hyphenation in titles */
+h1, h2, h3, h4, h5, h5 {
+    adobe-hyphenate: none;
+    -ms-hyphens: none; /* Trident (Windows) */
+    -moz-hyphens: none; /* Gecko (Firefox) */
+    -webkit-hyphens: none; /* Webkit */
+    -epub-hyphens: none; /* EPUB 3 */
+    hyphens: none; /* Futur standard */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    text-align: left;
+    font-family: Linux Biolinum, sans-serif;
+    font-variant: small-caps;
+}
+
+/* Title of a part */
+h1.part {
+    font-size: 250%;
+    text-align: center;
+}
+
+/* The `Part X` section of a part */
+h2.part {
+    font-size: 175%;
+    text-align: center;
+}
+
+/* Title of the book */
+h1.title {
+    text-align: center;
+    font-size: 300%;
+}
+/* Author */
+h2.author {
+    text-align: right;
+    font-size:  200%;
+}
+
+/* When toc is displayed inlined */
+#toc ol, #toc ul {
+    padding: 0;
+    margin-left: 1em;
+}
+#toc li {
+    list-style-type: none;
+    margin: 0; padding: 0;
+}
+
+#toc li:before {
+    content: none;
+}
+
+#cover img {
+    width: 100%;
+}
+
+.image img {
+    width: 80%;
+}
+
+.rule {
+    text-align: center;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-weight: bold;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    page-break-after: avoid;
+    break-after: avoid;
+}
+
+/* The number of the note in an expanded footnote (e.g. [3]) */
+.note-number {
+    font-weight: bold;
+    margin-right: 1em;
+}
+
+td.note-number {
+    vertical-align: top;
+}
+
+/* When footnotes (try to) be diplayed as margin notes */
+.sidenote {
+    display: block;
+    float: right;
+    width: 30%;
+    border: 1px solid black;
+    margin: 1em;
+    padding: .5em;
+    margin-right: -1.5em;
+}
+
+.sidenote .note-number {
+    float: left;
+}
+
+/* The div class displaying notes at the end of a chapter */
+div.notes {
+    text-align: justify;
+    border-top: thin dashed black;
+    margin-top: 1em;
+}
+
+table.notes {
+    border-collapse: collapse;
+    border-style: hidden;
+}
+
+table.notes tr td {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+table.notes tr td p {
+    text-indent: 0;
+}
+                 
+/* Every markdown table is included in a <div class = "table"> */
+.table {
+    margin: 1em;
+}
+
+.table table {
+    width: 80%;
+    margin: 0 auto;
+    border-style: solid;
+    border-width: thin;
+    border-color: black;
+    border-collapse: collapse;
+}
+
+.table table th, .table table td {
+    border-style: solid;
+    border-width: 1px;
+    text-align: center;
+}
+
+.table table th {
+    font-weight: bold;
+    font-variant: small-caps;
+}
+
+
+span.initial { 
+    float: left;
+    font-size: 285%;
+    font-weight: bold;
+    margin-right: 0.05em;
+    line-height: 0.8em;
+}
+
+p.first-para {
+    text-indent: 0;
+}
+
+/* Use this for escape narrow space so it is non-breaking */
+.nnbsp {
+    /* white-space: nowrap;*/
+    word-spacing: -0.13em;
+    /* Following necessary for Kobo EPUB3 reader??? */
+    margin: 0;
+    padding: 0;
+}
+
+/* Default  HTML CSS file includes default EPUB CSS file */
+
+/* Colours for the navigation menu (toc) */
+nav {
+    background: #CBBFCC;
+    color: black;
+    border-right-color: black;
+}
+
+#nav a:link {
+    color: black;
+}
+
+#nav a:visited {
+    color: black;
+}
+
+/* Colours for top and footer */
+#top {
+    background-color: #444343;
+    color: white;
+}
+
+footer {
+    background-color: #444343;
+    color: white;
+}
+
+footer a, #top a {
+    color: #fc71ff;
+}
+
+footer a:hover, #top a:hover {
+    color: #b743fe;
+}
+
+/* Additional elements, only use for proofreading */
+/* Grammar error */
+.grammar-error {
+    color: red;
+    text-decoration-line: underline;
+    text-decoration-style: double;
+/*    background: #d966ff;*/
+}
+
+
+p.first-para:first-letter {
+    font-size: 300%;
+    float: left;
+    font-weight: bold;
+    margin-right: 0.05em;
+    line-height: 1em;
+}
+
+/* The nav element corresponding to the navigation menu */
+nav {
+    z-index: 2;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 20%;
+    overflow-y: auto;
+    font-size: 80%;
+    margin-left: 0;
+    border-right-width: 2px;
+    border-right-style: dashed;
+}
+
+#nav code {
+    background-color: transparent;
+}
+
+#nav a:link {
+    text-decoration: none;
+}
+
+#nav a:visited {
+    text-decoration: none;
+}
+
+#nav {
+    text-align: left;
+}
+
+#nav h2 {
+    text-align: center;
+}
+
+#nav li {
+    list-style-type: none;
+    text-indent: -1em;
+}
+
+#nav li:before {
+    content: none;
+}
+
+#nav ul {
+    padding-right: 1em;
+    padding-left: 1.5em;
+}
+
+/* The menu containing the button to display the navigation bar */
+#menu {
+    position: fixed;
+    z-index: 2;
+    top: 0em;
+    left: 1em;
+    transition: left 1s;
+}
+
+#menu img {
+    opacity: 0.5;
+}
+
+#menu img:hover {
+    opacity: 1.0;
+    cursor: pointer;
+}
+
+#menu-button {
+    height: 1.5em;
+    padding: 0.5em;
+}
+
+#book-button {
+    height: 1.5em;
+    padding: 0.5em;
+    float: left;
+}
+
+/* Hide navigation bar */
+#nav {
+    left: -21%;
+    transition: left 1s;
+}
+
+/* The main content of the book */
+#content {
+    overflow-y: auto;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    transition: margin-left 1s;
+}
+
+/* Used for multifiles HTML */
+.prev_chapter {
+    text-align: left;
+    text-indent: 0;
+    margin-bottom: 1em;
+    font-size: 120%;
+    font-variant: small-caps;
+    font-weight: bold;
+}
+
+.next_chapter {
+    text-align: right;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 120%;
+    font-variant: small-caps;
+    font-weight: bold;
+}
+
+/* Improving readability for the HTML format only */
+p, blockquote, li, .image  {
+    margin-right: auto;
+    max-width: 33em;
+}
+
+blockquote {
+    padding: 1em;
+}
+
+#content {
+    text-align: center;
+}
+
+#page {
+    display: inline-block;
+    text-align: justify;
+    max-width: 33em;
+}
+
+#nav-container {
+    top: 0;
+    width: 100%;
+}
+
+#nav-title {
+    top: 0;
+}
+
+#toolbar {
+    top: 0;
+    float: left;
+}
+
+#toolbar img {
+    cursor: pointer;
+}
+
+footer {
+    margin-top: 2em;
+    margin-bottom: 0;
+}
+
+#top {
+    margin-top: 0;
+    margin-bottom: 1em;
+}
+
+#top p {
+    font-family: "Linux Biolinum";
+    font-weight: bold;
+    font-variant: small-caps;
+}
+
+footer, #top {
+    padding-top: .25em;
+    padding-bottom: .25em;
+    margin-left: 0;
+    margin-right: 0;
+    text-align: center;
+    transition: margin-left 1s;
+}
+
+footer a, #top a {
+    text-decoration: none;
+}
+
+footer p, #top p {
+    text-indent: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+    max-width: 33em;
+}
+
+
+    </style>
+    <style type = "text/css" media = "print">
+      #page {
+    display: block;
+}
+
+.chapter {
+    page-break-before: always;
+}
+
+#menu {
+    display: none;
+}
+
+#nav {
+    display: none;
+}
+    </style>
+   <script>
+function on(name) {
+    var elements = document.getElementsByClassName(name);
+    for (var i = 0; i < elements.length; i++) {
+        var elem = elements[i];
+        elem.style.backgroundColor = "pink";
+    }
+}
+function off(name) {
+    var elements = document.getElementsByClassName(name);
+    for (var i = 0; i < elements.length; i++) {
+        var elem = elements[i];
+        elem.style.backgroundColor = "white";
+    }
+}
+
+var display_menu = false;
+function toggle() {
+    if (display_menu == true) {
+        display_menu = false;
+        document.getElementById("nav").style.left = "-21%";
+        document.getElementById("content").style.marginLeft = "0%";
+        document.getElementById("menu").style.left = "1em";
+/*        if(document.getElementById("top")) {
+            document.getElementById("top").style.left = "0";
+        }
+        if(document.getElementById("footer")) {
+            document.getElementById("footer").style.marginLeft = "0%";
+        }*/
+    } else {
+        display_menu = true;
+        document.getElementById("nav").style.left = "0";
+        document.getElementById("content").style.marginLeft = "20%";
+        document.getElementById("menu").style.left = "20%";
+/*        if(document.getElementById("top")) {
+            document.getElementById("top").style.left = "20%";
+        }
+        if(document.getElementById("footer")) {
+            document.getElementById("footer").style.marginLeft = "20%";
+        }*/
+    }
+}
+
+
+
+   </script>
+
+
+  </head>
+  <body>
+
+    <nav id = "nav">
+      <div id = "nav-title">
+        <h2><a href = "#link-0">Membangun Aplikasi Web Menggunakan Rust</a></h2>
+      </div>
+      <ul>
+<li><a href = "#link-1">1. Gambaran Umum Rust untuk Membangun Aplikasi Web</a></li>
+<li><a href = "#link-2">2. Klien HTTP</a></li>
+<li><a href = "#link-3">3. Server HTTP</a></li>
+<li><a href = "#link-4">4. HTTP/2</a></li>
+<li><a href = "#link-5">5. Template Engine</a></li>
+<li><a href = "#link-6">6. ORM (Object Relational Mapping)</a></li>
+<li><a href = "#link-7">7. Framework Web - Iron</a></li>
+<li><a href = "#link-8">8. Framework Web - Nickel</a></li>
+<li><a href = "#link-9">9. Framework Web - Rocket</a></li>
+<li><a href = "#link-10">10. Microframework Web - Pencil</a></li>
+<li><a href = "#link-11">11. WebSocket</a></li>
+<li><a href = "#link-12">12. RESTful Web Services</a></li>
+
+</ul>
+
+    </nav>
+
+    <div id = "content">
+      
+      <div id = "page">
+        <header>
+
+          <div id = "menu">
+            <img id = "menu-button" onclick="toggle();"
+                 src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgIHhtbG5zOmNjPSJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9ucyMiCiAgIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzb2RpcG9kaT0iaHR0cDovL3NvZGlwb2RpLnNvdXJjZWZvcmdlLm5ldC9EVEQvc29kaXBvZGktMC5kdGQiCiAgIHhtbG5zOmlua3NjYXBlPSJodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy9uYW1lc3BhY2VzL2lua3NjYXBlIgogICB3aWR0aD0iMjAwbW0iCiAgIGhlaWdodD0iMjAwbW0iCiAgIHZpZXdCb3g9IjAgMCA3MDguNjYxNDIgNzA4LjY2MTQxIgogICBpZD0ic3ZnMiIKICAgdmVyc2lvbj0iMS4xIgogICBpbmtzY2FwZTp2ZXJzaW9uPSIwLjkxIHIxMzcyNSIKICAgc29kaXBvZGk6ZG9jbmFtZT0ibWVudS5zdmciPgogIDxkZWZzCiAgICAgaWQ9ImRlZnM0IiAvPgogIDxzb2RpcG9kaTpuYW1lZHZpZXcKICAgICBpZD0iYmFzZSIKICAgICBwYWdlY29sb3I9IiNmZmZmZmYiCiAgICAgYm9yZGVyY29sb3I9IiM2NjY2NjYiCiAgICAgYm9yZGVyb3BhY2l0eT0iMS4wIgogICAgIGlua3NjYXBlOnBhZ2VvcGFjaXR5PSIwLjAiCiAgICAgaW5rc2NhcGU6cGFnZXNoYWRvdz0iMiIKICAgICBpbmtzY2FwZTp6b29tPSIwLjQ5NDk3NDc1IgogICAgIGlua3NjYXBlOmN4PSIxMDUuNjEyNzUiCiAgICAgaW5rc2NhcGU6Y3k9IjQwNy4wNjM5MSIKICAgICBpbmtzY2FwZTpkb2N1bWVudC11bml0cz0icHgiCiAgICAgaW5rc2NhcGU6Y3VycmVudC1sYXllcj0ibGF5ZXIxIgogICAgIHNob3dncmlkPSJmYWxzZSIKICAgICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9IjEzNjYiCiAgICAgaW5rc2NhcGU6d2luZG93LWhlaWdodD0iNzA0IgogICAgIGlua3NjYXBlOndpbmRvdy14PSIwIgogICAgIGlua3NjYXBlOndpbmRvdy15PSIyNyIKICAgICBpbmtzY2FwZTp3aW5kb3ctbWF4aW1pemVkPSIxIiAvPgogIDxtZXRhZGF0YQogICAgIGlkPSJtZXRhZGF0YTciPgogICAgPHJkZjpSREY+CiAgICAgIDxjYzpXb3JrCiAgICAgICAgIHJkZjphYm91dD0iIj4KICAgICAgICA8ZGM6Zm9ybWF0PmltYWdlL3N2Zyt4bWw8L2RjOmZvcm1hdD4KICAgICAgICA8ZGM6dHlwZQogICAgICAgICAgIHJkZjpyZXNvdXJjZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlL1N0aWxsSW1hZ2UiIC8+CiAgICAgICAgPGRjOnRpdGxlPjwvZGM6dGl0bGU+CiAgICAgIDwvY2M6V29yaz4KICAgIDwvcmRmOlJERj4KICA8L21ldGFkYXRhPgogIDxnCiAgICAgaW5rc2NhcGU6bGFiZWw9IkxheWVyIDEiCiAgICAgaW5rc2NhcGU6Z3JvdXBtb2RlPSJsYXllciIKICAgICBpZD0ibGF5ZXIxIgogICAgIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsLTM0My43MDA3OSkiPgogICAgPHBhdGgKICAgICAgIHN0eWxlPSJmaWxsOm5vbmU7ZmlsbC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEwMDtzdHJva2UtbGluZWNhcDpyb3VuZDtzdHJva2UtbGluZWpvaW46cm91bmQ7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmU7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIGQ9Im0gMTA0LjMzMDcxLDQ2OS41MDUxIDUwMCwwIgogICAgICAgaWQ9InBhdGg0MTM2IgogICAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIgLz4KICAgIDxwYXRoCiAgICAgICBzdHlsZT0iZmlsbDpub25lO2ZpbGwtcnVsZTpldmVub2RkO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxMDA7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICBkPSJtIDEwNC4zMzA3MSw3MDQuNTA1MSA1MDAsMCIKICAgICAgIGlkPSJwYXRoNDEzNi01IgogICAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIKICAgICAgIGlua3NjYXBlOnRyYW5zZm9ybS1jZW50ZXIteD0iNzEuNDI4NTcyIgogICAgICAgaW5rc2NhcGU6dHJhbnNmb3JtLWNlbnRlci15PSItMjQyLjg1NzE2IiAvPgogICAgPHBhdGgKICAgICAgIHN0eWxlPSJmaWxsOm5vbmU7ZmlsbC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEwMDtzdHJva2UtbGluZWNhcDpyb3VuZDtzdHJva2UtbGluZWpvaW46cm91bmQ7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmU7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIGQ9Im0gMTA0LjMzMDcxLDkzOS41MDUwNiA1MDAsMCIKICAgICAgIGlkPSJwYXRoNDEzNi01LTMiCiAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIgogICAgICAgaW5rc2NhcGU6dHJhbnNmb3JtLWNlbnRlci14PSI3MS40Mjg1NzIiCiAgICAgICBpbmtzY2FwZTp0cmFuc2Zvcm0tY2VudGVyLXk9Ii0yNDIuODU3MTYiIC8+CiAgPC9nPgo8L3N2Zz4K"
+                 alt = "Table of contents" title = "Table of contents" />
+          </div>
+          <h1 id = "link-0" class="title" >Membangun Aplikasi Web Menggunakan Rust</h1>
+          <h2 class="author">Bambang Purnomosidi D. P.</h2>
+        </header>
+
+        <div id = "chapter-0" class = "chapter">
+  <h1 id = "link-1">1. Gambaran Umum Rust untuk Membangun Aplikasi Web</h1>
+<p id = "para-1">Bab ini membahas tentang beberapa hal yang menjadi landasan utama dari pembangunan aplikasi Web menggunakan Rust</p>
+
+</div><div id = "chapter-1" class = "chapter">
+  <h1 id = "link-2">2. Klien HTTP</h1>
+<p id = "para-2">Bab ini membahas tentang membuat program Rust untuk mengakses layanan HTTP atau sering dikenal dengan istilah <em>klien HTTP</em></p>
+
+</div><div id = "chapter-2" class = "chapter">
+  <h1 id = "link-3">3. Server HTTP</h1>
+<p id = "para-3">Bab ini membahas tentang pustaka Rust untuk menyediakan layanan HTTP serta bagaimana cara menggunakan pustaka-pustaka tersebut.</p>
+
+</div><div id = "chapter-3" class = "chapter">
+  <h1 id = "link-4">4. HTTP/2</h1>
+<p id = "para-4">Bab ini membahas tentang spesifikasi HTTP/2 serta pustaka Rust yang menyediakan akses HTTP/2 ini yaitu <em>Solicit</em>.</p>
+
+</div><div id = "chapter-4" class = "chapter">
+  <h1 id = "link-5">5. Template Engine</h1>
+<p id = "para-5">Bab ini membahas tentang berbagai pustaka Rust yang menyediakan fasilitas <em>templating</em>.</p>
+
+</div><div id = "chapter-5" class = "chapter">
+  <h1 id = "link-6">6. ORM (Object Relational Mapping)</h1>
+<p id = "para-6">Bab ini membahas tentang penggunaan Diesel yang menyediakan fasilitas ORM untuk Rust.</p>
+
+</div><div id = "chapter-6" class = "chapter">
+  <h1 id = "link-7">7. Framework Web - Iron</h1>
+<p id = "para-7">Bab ini membahas tentang penggunaan Iron sebagai framework Web untuk membangun aplikasi Web maupun untuk membangun layanan Web (Web API).</p>
+
+</div><div id = "chapter-7" class = "chapter">
+  <h1 id = "link-8">8. Framework Web - Nickel</h1>
+<p id = "para-8">Bab ini membahas tentang penggunaan Nickel untuk membangun aplikasi Web.</p>
+
+</div><div id = "chapter-8" class = "chapter">
+  <h1 id = "link-9">9. Framework Web - Rocket</h1>
+<p id = "para-9">Bab ini membahas tentang salah satu framework untuk membangun aplikasi Web menggunakan Rust, yaitu Rocket.</p>
+
+</div><div id = "chapter-9" class = "chapter">
+  <h1 id = "link-10">10. Microframework Web - Pencil</h1>
+<p id = "para-10">Bab ini membahas tentang penggunaan Pencil sebagai Web microframework untuk mmbangun aplikasi Web.</p>
+
+</div><div id = "chapter-10" class = "chapter">
+  <h1 id = "link-11">11. WebSocket</h1>
+<p id = "para-11">Bab ini membahas tentang pustaka Rust untuk WebSocket</p>
+
+</div><div id = "chapter-11" class = "chapter">
+  <h1 id = "link-12">12. RESTful Web Services</h1>
+<p id = "para-12">Bab ini membahas tentang penggunaan Rust untuk membangun RESTful Web Services</p>
+
+</div>
+
+      </div>
+      
+    </div>
+  </body>
+</html>

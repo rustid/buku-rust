@@ -1,0 +1,7 @@
+[package]
+name = "pencil-resources"
+version = "0.1.0"
+authors = ["Web Intelligence Research Group STMIK AKAKOM <cloud.stmik.akakom@gmail.com>"]
+
+[dependencies]
+pencil = "*"
