@@ -1,6 +1,6 @@
 # Buku Rust
 
-Repo ini berisi beberapa buku sederhana tentang Rust. Buku-buku ini dikembangkan oleh komunitas Rust Indonesia. Buku-buku ini ditulis menggunakan Markdown dan dikembangkan menggunakan tool [mdBook](https://github.com/azerupi/mdBook).
+Repo ini berisi beberapa buku sederhana tentang Rust. Buku-buku ini dikembangkan oleh komunitas Rust Indonesia. Buku-buku ini ditulis menggunakan Markdown dan dikembangkan menggunakan tool [Crowbook](https://github.com/lise-henry/crowbook)
 
 # Lisensi
 
