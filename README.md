@@ -2,6 +2,11 @@
 
 Repo ini berisi beberapa buku sederhana tentang Rust. Buku-buku ini dikembangkan oleh komunitas Rust Indonesia. Buku-buku ini ditulis menggunakan Markdown dan dikembangkan menggunakan tool [Crowbook](https://github.com/lise-henry/crowbook)
 
+# Dependensi
+
+* crowbook
+* xelatex
+
 # Lisensi
 
 [CC-BY-SA-4.0](LICENSE.md)
