@@ -1,0 +1,17 @@
+author: anak10thn
+title: FFI Rust
+lang: id
+
+# Uncomment and fill to generate files
+output.html: hasil/rust-ffi-id.html
+output.epub: hasil/rust-ffi-id.epub
+output.pdf: hasil/rust-ffi-id.pdf
+
+# Uncomment and fill to set cover image (for Epub)
+cover: gambar/sampul.png
+
+# List of chapters
++ bab-01.md
++ bab-02.md
++ bab-03.md
++ bab-04.md
