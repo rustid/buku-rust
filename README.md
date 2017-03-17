@@ -1,4 +1,6 @@
-# Buku Rust
+# Buku Rust 
+
+[![Build Status](https://api.travis-ci.org/repositories/rustid/buku-rust.svg?branch=master)](https://travis-ci.org/rustid/buku-rust)
 
 Repo ini berisi beberapa buku sederhana tentang Rust. Buku-buku ini dikembangkan oleh komunitas Rust Indonesia. Buku-buku ini ditulis menggunakan Markdown dan dikembangkan menggunakan tool [Crowbook](https://github.com/lise-henry/crowbook)
 
