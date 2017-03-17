@@ -1,0 +1,27 @@
+language: rust
+os:
+    - linux
+before_script:
+    - sudo add-apt-repository ppa:texlive-backports/ppa -y
+    - sudo apt-get -qq update
+    - sudo apt-get --no-install-recommends install -y texlive-latex-extra texlive-xetex lmodern
+    - cargo install crowbook
+    - export PATH=$HOME/.cargo/bin:$PATH
+    - for dir in */; do mkdir -- "$dir/hasil"; done
+script:
+    - make all
+after_success:
+    - mkdir _build/
+    - for dir in [^_]*/; do cp $dir/hasil/* _build/; done
+    - ls _build/
+    # TODO tar.gz build files
+deploy:
+    provider: releases
+    api_key:
+        secure: a6/1TD24iA7TXeCpo9/vSK9cVkZMZ5UvXsk9iVOqdBNzgSFcJ2QdH06GpG6MzBUlzt4IHl2uvUg0jid1r5AewSKnPdUdXDGYkMKWLJQvyXe00BwSwRrCL2MXRlfc82+T52aer4t36dQIHvXzSq+f38KDDUpSzNlgTdmbDD5Q2bv5hecrjaVWvM5vS1PeijjfW4dRklMC2cWX1SdmHrtl7Y8MPlHsiJi5+dZhmvqvTsOR9F7BgoJ5/XyTsHqrlEH2U8BswUTGhafcJF6RFBwgY6f8Pj+Jdh3XLbw7nY/Z98jrvCs3pzNWRyBhD66B4+IDUWHpnhaxTZ1tmNOxw8Fb3ENvLCIdf6ZuxNpvr1TU9QNGy/c9Mc7CfxL1GlU3YermPG47vUBr5Uq/70rPyo4H9z9nYIn9QTiCQrBVv4ToWRfKmkLtoZ74hsMs2piqzrCy9++fka/SwzvGMgbJlmaLkrRPDfjgZObi4XTGzeYVxwB4HpyjWLm02tgV50896iOFYH98Z6EOoAMHsLjVICRPq/qoXgvAAE2P+unslc+ceA0W5Q4tlw52wlG8bLGHgdcda70S/Wc/gDMf7wMM5duGnjvzqkia0kSlG/qSRcd2vfSH7AytrA1V2iGSMP9v8vaPZeFSfl7uGMIIqtR4gt9UP0ZBIsCrpESBHfHbMa7WQPM=
+    file_glob: true
+    file: _build/*
+    skip_cleanup: true
+    on:
+        repo: rustid/buku-rust
+        tags: true
