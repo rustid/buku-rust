@@ -1,4 +1,4 @@
-RUST_BOOK_ID := ffi-rust rust-untuk-web
+RUST_BOOK_ID := ffi-rust rust-untuk-web dasar-dasar-rust
 
 .PHONY: all $(RUST_BOOK_ID)
 
