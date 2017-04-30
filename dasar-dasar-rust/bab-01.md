@@ -57,7 +57,7 @@ Pada saat kita menginstal Rust maka kita akan mendapatkan tiga buah tool yaitu :
 3. **rustup** adalah toolchain manajemen yang sudah kita bahas diatas.
 
 ### Instalasi paket pendukung
-Pada tahap instalasi diatas sebenarnya kita sudah dapat bermain dengan Rust, namun, ada "the most useful tools" yang sangat berguna bagi kita yaitu : racer, rustfmt, rustsym.
+Pada tahap instalasi diatas sebenarnya kita sudah dapat bermain dengan Rust, namun ada "the most useful tools" yang sangat berguna bagi kita yaitu : racer, rustfmt, rustsym.
 * **racer**
 
   Tool ini berfungsi untuk auto-suggestion pada saat kita menuliskan keyword, library, dan lainnya yang hendak kita pakai. Untuk menginstal racer jalankan perintah :
@@ -99,11 +99,11 @@ Setelah instalasi text editor selesai kita perlu mengintegrasikan tool tambahan 
 
 | Display Name                             | Description                                                                                  |
 |:-----------------------------------------|:---------------------------------------------------------------------------------------------|
-| Path to the Racer executable             | `/home/<user>/.cargo/bin/racer`                                                              |
-| Path to the Rust source code directory   | `/home/<user>/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src`   |
-| Cargo home directory                     | `/home/<user>/.cargo/`                                                                       |
+| Path to the Racer executable             | `~/.cargo/bin/racer`                                                              |
+| Path to the Rust source code directory   | `~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src`   |
+| Cargo home directory                     | `~/.cargo/`                                                                       |
 
-  > Note: Ubah `<user>` dengan nama user pada komputer anda.
+  > Note: `~` adalah folder HOME user anda.
 
 ## Command
 Pada sub bab ini kita akan membahas tentang penggunaan _command line interface_ dari tool : rustc, rustup dan cargo yang berguna pada saat kita membangun aplikasi.
@@ -285,9 +285,9 @@ Untuk menggunakan rustup sangat mudah format penulisan nya adalah `rustup [FLAGS
     ```
 * **Component**
   * Menambahkan component, untuk menambahkan caranya `rustup component add <COMPONENT>` contoh :
-  ```
-  rustup component add rust-src
-  ```
+    ```
+    rustup component add rust-src
+    ```
   * Melihat daftar component
 
     ```
